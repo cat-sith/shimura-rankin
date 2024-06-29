@@ -1,0 +1,22 @@
+
+coefell = l -> (x -> Col(mfcoefs(x, l)[^1])) 
+bracketmaker = (l, e)-> mfbracket(mfeisenstein(l-2*e), mfTheta(), e) 
+
+detl = l -> matdet(matconcat(apply(x -> Col(mfcoefs(x, floor(l/6))[^1]), apply(e -> bracketmaker(l,e), vector(floor(l/6), i, i) )))) 
+
+for (i=a,b,print(4*i+12 " " detl(4*i+12)!=0)) 
+
+
+#run the above commands in that order! replace a,b as desired. output of '1' means independent and '0' means they (appear) dependent
+#you might have to allocate more memory to Pari/GP to to do computations above about 350ish? do this by running 'default(parisize, 10000000000)' before you do anything else
+
+#coefell outputs a function that finds the fourier coefficients 1...l inclusive of x
+#given an l and an e, bracketmaker outputs the bracket [G_{l-2*e}, Theta]_e
+#given an l, detl outputs the determinant of the matrix containing the fourier coefficients from 1...l for each bracket, with e ranging from 1 to floor(l/6)
+#for loop checks that the determinant isn't 0 for all S_{4*i+12} where a <= i <= b. CHANGE A AND B BEFORE RUNNING
+
+#this code failing does NOT necessarily mean the chosen brackets were linearly independent; it's possible that they appear dependent but are in fact independent when examining more fourier terms
+
+#this code is checking the independence of [G_{l-2*e}(z), Theta]_e, not [G_{l-2*e}(4z), Theta]_e. but since U4[G_{l-2*e}(4z), Theta]_e = 4^e[G_{l-2*e}(z), Theta]_e, the independence of [G_{l-2*e}(z), Theta]_e is sufficient
+
+#currently i've checked up to 1000 and they're all independent! 
